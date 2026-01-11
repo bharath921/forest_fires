@@ -1,0 +1,3 @@
+option_settings:
+    "aws:elastbeanstalk:container:python":
+        WSGIpath: application:application
