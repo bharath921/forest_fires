@@ -1,0 +1,256 @@
+<!doctype html>
+<html lang="en">
+<head>
+	<meta charset="utf-8">
+	<meta name="viewport" content="width=device-width, initial-scale=1">
+	<title>FWI Prediction</title>
+	<style>
+		* {
+			margin: 0;
+			padding: 0;
+			box-sizing: border-box;
+		}
+
+		body {
+			font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+			background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+			min-height: 100vh;
+			display: flex;
+			align-items: center;
+			justify-content: center;
+			padding: 20px;
+		}
+
+		.container {
+			background: rgba(255, 255, 255, 0.95);
+			backdrop-filter: blur(10px);
+			border-radius: 24px;
+			box-shadow: 0 20px 60px rgba(0, 0, 0, 0.3);
+			max-width: 500px;
+			width: 100%;
+			padding: 48px 40px;
+		}
+
+		.header {
+			text-align: center;
+			margin-bottom: 40px;
+		}
+
+		.header h1 {
+			font-size: 32px;
+			font-weight: 700;
+			color: #1a202c;
+			margin-bottom: 8px;
+		}
+
+		.header p {
+			color: #718096;
+			font-size: 14px;
+		}
+
+		.form-grid {
+			display: grid;
+			grid-template-columns: 1fr 1fr;
+			gap: 16px;
+			margin-bottom: 24px;
+		}
+
+		.form-group {
+			position: relative;
+		}
+
+		.form-group.full-width {
+			grid-column: 1 / -1;
+		}
+
+		.form-group label {
+			display: block;
+			font-size: 13px;
+			font-weight: 600;
+			color: #4a5568;
+			margin-bottom: 6px;
+		}
+
+		.form-group input {
+			width: 100%;
+			padding: 12px 16px;
+			border: 2px solid #e2e8f0;
+			border-radius: 12px;
+			font-size: 15px;
+			transition: all 0.3s ease;
+			background: white;
+			color: #2d3748;
+		}
+
+		.form-group input:focus {
+			outline: none;
+			border-color: #667eea;
+			box-shadow: 0 0 0 3px rgba(102, 126, 234, 0.1);
+		}
+
+		.form-group input::placeholder {
+			color: #cbd5e0;
+		}
+
+		.predict-btn {
+			width: 100%;
+			padding: 16px;
+			background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+			color: white;
+			border: none;
+			border-radius: 12px;
+			font-size: 16px;
+			font-weight: 600;
+			cursor: pointer;
+			transition: all 0.3s ease;
+			box-shadow: 0 4px 15px rgba(102, 126, 234, 0.4);
+		}
+
+		.predict-btn:hover {
+			transform: translateY(-2px);
+			box-shadow: 0 6px 20px rgba(102, 126, 234, 0.5);
+		}
+
+		.predict-btn:active {
+			transform: translateY(0);
+		}
+
+		.result-card {
+			margin-top: 32px;
+			padding: 24px;
+			background: linear-gradient(135deg, #f6f8fb 0%, #e9ecf5 100%);
+			border-radius: 16px;
+			text-align: center;
+			border: 2px solid #e2e8f0;
+		}
+
+		.result-label {
+			font-size: 14px;
+			color: #718096;
+			font-weight: 500;
+			margin-bottom: 12px;
+			text-transform: uppercase;
+			letter-spacing: 0.5px;
+		}
+
+		.result-value {
+			font-size: 48px;
+			font-weight: 700;
+			background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+			-webkit-background-clip: text;
+			-webkit-text-fill-color: transparent;
+			background-clip: text;
+		}
+
+		@media (max-width: 600px) {
+			.form-grid {
+				grid-template-columns: 1fr;
+			}
+
+			.container {
+				padding: 32px 24px;
+			}
+
+			.header h1 {
+				font-size: 28px;
+			}
+
+			.result-value {
+				font-size: 36px;
+			}
+		}
+	</style>
+</head>
+<body>
+	<div class="container">
+		<div class="header">
+			<h1>🔥 FWI Prediction</h1>
+			<p>Fire Weather Index Prediction System</p>
+		</div>
+
+		<form id="predict-form">
+			<div class="form-grid">
+				<div class="form-group">
+					<label for="temperature">Temperature</label>
+					<input type="number" step="any" id="temperature" name="temperature" placeholder="°C">
+				</div>
+
+				<div class="form-group">
+					<label for="rh">Relative Humidity</label>
+					<input type="number" step="any" id="rh" name="rh" placeholder="%">
+				</div>
+
+				<div class="form-group">
+					<label for="ws">Wind Speed</label>
+					<input type="number" step="any" id="ws" name="ws" placeholder="km/h">
+				</div>
+
+				<div class="form-group">
+					<label for="rain">Rainfall</label>
+					<input type="number" step="any" id="rain" name="rain" placeholder="mm">
+				</div>
+
+				<div class="form-group">
+					<label for="ffmc">FFMC</label>
+					<input type="number" step="any" id="ffmc" name="ffmc" placeholder="Fine Fuel">
+				</div>
+
+				<div class="form-group">
+					<label for="dmc">DMC</label>
+					<input type="number" step="any" id="dmc" name="dmc" placeholder="Duff Moisture">
+				</div>
+
+				<div class="form-group">
+					<label for="isi">ISI</label>
+					<input type="number" step="any" id="isi" name="isi" placeholder="Initial Spread">
+				</div>
+
+				<div class="form-group">
+					<label for="classes">Classes</label>
+					<input type="text" id="classes" name="classes" placeholder="Fire class">
+				</div>
+
+				<div class="form-group full-width">
+					<label for="region">Region</label>
+					<input type="text" id="region" name="region" placeholder="Geographic region">
+				</div>
+			</div>
+
+			<button type="button" id="predict-btn" class="predict-btn">
+				Calculate FWI Prediction
+			</button>
+		</form>
+
+		<div class="result-card">
+			<div class="result-label">FWI Prediction Score</div>
+			<div id="predict-value" class="result-value">—</div>
+		</div>
+	</div>
+
+	<script>
+		function demoPredict() {
+			const form = document.getElementById('predict-form');
+			const valueEl = document.getElementById('predict-value');
+			const fd = new FormData(form);
+			const obj = Object.fromEntries(fd.entries());
+
+			const temperature = parseFloat(obj.temperature) || 0;
+			const rh = parseFloat(obj.rh) || 0;
+			const ws = parseFloat(obj.ws) || 0;
+			const rain = parseFloat(obj.rain) || 0;
+			const ffmc = parseFloat(obj.ffmc) || 0;
+			const dmc = parseFloat(obj.dmc) || 0;
+			const isi = parseFloat(obj.isi) || 0;
+
+			let score = 0.5 * temperature + 0.3 * ws + 0.15 * ffmc + 0.1 * dmc + 0.12 * isi - 0.3 * (rh / 100) - 0.4 * rain;
+			score = Math.max(0, score);
+			valueEl.textContent = score.toFixed(2);
+		}
+
+		window.addEventListener('DOMContentLoaded', () => {
+			const btn = document.getElementById('predict-btn');
+			if (btn) btn.addEventListener('click', demoPredict);
+		});
+	</script>
+</body>
+</html>

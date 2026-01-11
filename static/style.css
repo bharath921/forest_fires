@@ -1,0 +1,56 @@
+/* Minimal style to resemble the screenshot */
+html, body { height: 100%; }
+body {
+  margin: 0;
+  font-family: Georgia, 'Times New Roman', serif;
+  color: #111;
+  background: #fdfdfd;
+}
+
+.page {
+  max-width: 980px;
+  margin: 0 auto;
+  padding: 32px 24px;
+}
+
+.title {
+  font-size: 56px;
+  font-weight: 700;
+  margin: 0 0 24px;
+}
+
+.predict-form {
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: 12px;
+  max-width: 360px;
+}
+
+.predict-form input {
+  padding: 10px 12px;
+  border: 1px solid #bbb;
+  border-radius: 4px;
+  font-size: 18px;
+}
+
+.btn {
+  display: inline-block;
+  padding: 8px 14px;
+  font-size: 18px;
+  border: 1px solid #888;
+  background: #eee;
+  color: #111;
+  border-radius: 4px;
+  cursor: pointer;
+}
+
+.result {
+  margin-top: 48px;
+  font-size: 36px;
+}
+
+.highlight {
+  background: #cfe3ff;
+  padding: 6px 8px;
+  border-radius: 4px;
+}
